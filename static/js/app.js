@@ -1,11 +1,11 @@
-/**
- * Created by user on 05.10.15.
- */
 
 angular
     .module('myApp', [
         'ngRoute',
-        'ui.router'
+        'ui.router',
+        'ngResource',
+        'ngAnimate',
+        'myApp.services',
 
     ])
     .config(function ($locationProvider, $httpProvider, $resourceProvider, $interpolateProvider, $routeProvider,
@@ -23,11 +23,6 @@ angular
 
         $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension):/);
 
-        // enable html5Mode for pushstate ('#'-less URLs)
-        $locationProvider.html5Mode(true);
-        $locationProvider.hashPrefix('!');
-
-
         // Routing
         $urlRouterProvider.otherwise('/');
         $stateProvider
@@ -35,11 +30,6 @@ angular
                 url: '/',
                 templateUrl: '/static/partials/home.html',
                 controller: 'HomeController'
-            })
-            .state('my_vehicle', {
-                url: '/my_vehicle/:id/',
-                templateUrl: '/static/partials/my-bookings.html',
-                controller: 'BookingsController'
             })
             .state('otherwise', {
                 url : '*path',

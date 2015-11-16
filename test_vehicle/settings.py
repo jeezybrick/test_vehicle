@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 
     'lbs2',
+    'api',
 
     'crispy_forms',
     'activelink',

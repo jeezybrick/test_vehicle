@@ -25,11 +25,11 @@
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li class="{% ifactive "home" %} active {% endifactive %}">
-                    <a href="{% url 'home' %}">{% trans "Home" %}</a>
+                    <a href="{% url 'home' %}" target="_self">{% trans "Home" %}</a>
                 </li>
 
                 {% if user.is_staff %}
-                    <li><a href="/admin/">Admin</a>
+                    <li><a href="/admin/" target="_self">Admin</a>
                     </li>
                 {% endif %}
             </ul>
