@@ -6,6 +6,10 @@ function HomeController($scope, MyVehicles) {
 
     var i = 0,
         j = 0;
+    $scope.endDate = new Date();
+    $scope.startDate = new Date();
+    $scope.vehiclesLoad = false;
+    $scope.vehiclesLoadError = false;
 
     $scope.vehicles = MyVehicles.query(function (response) {
 
@@ -24,7 +28,7 @@ function HomeController($scope, MyVehicles) {
                             'EPSG:3857'
                         )),
                     name: $scope.vehicles[i].name, // vehicle name
-                    ts: $scope.vehicles[i].ts, // vehicle location time
+                    ts: moment($scope.vehicles[i].location_set[j].ts).format('YYYY-MM-DD'), // vehicle location time
                 });
 
                 $scope.iconFeatures.push(iconFeature); // push each object in arr
@@ -141,7 +145,11 @@ function HomeController($scope, MyVehicles) {
             }
         });
 
-    }, function () {
+        $scope.vehiclesLoad = true;
+
+    }, function (error) {
+
+        $scope.vehiclesLoadError = error;
 
     });
 

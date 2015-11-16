@@ -4,6 +4,7 @@ angular
         'ngRoute',
         'ui.router',
         'ngResource',
+        'ngMaterial',
         'ngAnimate',
         'myApp.services',
 

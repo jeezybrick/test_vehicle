@@ -20,7 +20,9 @@
     <!-- OpenLayers  css-->
     <link rel="stylesheet" href="{% static 'css/ol.css' %}">
 
-    <link rel="stylesheet" href="{% static 'css/bootstrap-datetimepicker.min.css' %}">
+    <!-- Angular material -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/0.11.4/angular-material.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/0.11.4/angular-material.layouts.min.css">
 
     <!-- Custom css -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
@@ -68,15 +70,18 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.7/angular-route.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.7/angular-animate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.7/angular-aria.min.js"></script>
 
 <!-- OpenLayers js -->
 <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+<script src="{% static 'js/ol.js' %}"></script>
+
+<!-- Angular Material Javascript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/0.11.4/angular-material.min.js"></script>
 
 <!-- Moment.js -->
 <script src="{% static 'js/moment.js' %}"></script>
 
-
-<script src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
 
 <!-- Custom js -->
 <script src="{% static 'js/app.js' %}"></script>
@@ -85,38 +90,6 @@
 <script src="{% static 'js/controllers.js' %}"></script>
 <script src="{% static 'js/common.js' %}"></script>
 
-<!-- Custom js -->
-<script src="{% static 'js/ol.js' %}"></script>
-
-<script>
-    $(function () {
-        $('#datetimepicker1').datetimepicker({
-            format: 'YYYY-MM-DD HH:MM',
-            defaultDate: "{{ start_date | date:"Y-m-d H:s"}}"
-        });
-        $('#datetimepicker2').datetimepicker({
-            format: 'YYYY-MM-DD HH:MM',
-            defaultDate: "{{ end_date | date:"Y-m-d H:s"}}"
-        });
-    });
-
-</script>
-
-<script>
-    $(function () {
-        $('.vis_checkbox').on('change', function () {
-            var form = $(this).parents('form:first');
-            form.submit();
-        });
-    });
-</script>
-
-
-<script>
-
-
-
-</script>
 
 </body>
 </html>
