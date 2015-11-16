@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'crispy_forms',
     'activelink',
     'debug_toolbar',
+    'rest_framework',
 
 )
 

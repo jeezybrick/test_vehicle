@@ -90,7 +90,6 @@ class HomeView(View):
             objects = utils.sort_by_date(request)[:max_objects]
             points = objects[:max_points]
             dates = utils.set_choose_dates(request)
-            print(dates)
 
         return render(request, self.template_name, {'objects': objects,
                                                     'objects_all': objects_all,

@@ -21,4 +21,7 @@ urlpatterns = [
 
     url(r'^', include('lbs2.urls')),
 
+    url(r'^', include('api.urls')),
+
+
 ]
