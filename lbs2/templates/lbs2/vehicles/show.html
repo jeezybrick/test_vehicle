@@ -25,16 +25,17 @@
                 </h2>
 
                 <!-- Location some details -->
-                {% for location in vehicle.location_set.all %}
-                    <h3>
+                {% for location in locations %}
+                    <h4>
                         {% trans "Longitude" %}: <small>{{ location.longitude }}</small>
-                    </h3>
-                    <h3>
+                    </h4>
+                    <h4>
                         {% trans "Latitude" %}: <small>{{ location.latitude }}</small>
-                    </h3>
-                    <h3>
+                    </h4>
+                    <h4>
                         {% trans "Distance" %}: <small>{{ location.distance }}</small>
-                    </h3>
+                    </h4>
+                    <hr>
                 {% endfor %}
             </div>
         </div>

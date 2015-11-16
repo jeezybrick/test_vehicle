@@ -20,6 +20,8 @@
     <!-- OpenLayers  css-->
     <link rel="stylesheet" href="{% static 'css/ol.css' %}">
 
+    <link rel="stylesheet" href="{% static 'css/bootstrap-datetimepicker.min.css' %}">
+
     <!-- Custom css -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/media.css' %}">
@@ -62,18 +64,48 @@
 <!-- OpenLayers js -->
 <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
 
+<!-- Moment.js -->
+<script src="{% static 'js/moment.js' %}"></script>
+
+
+<script src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
+
 <!-- Custom js -->
 <script src="{% static 'js/common.js' %}"></script>
 
 <!-- Custom js -->
 <script src="{% static 'js/ol.js' %}"></script>
 
+<script>
+    $(function () {
+        $('#datetimepicker1').datetimepicker({
+            format: 'YYYY-MM-DD HH:MM',
+            defaultDate: "{{ start_date | date:"Y-m-d H:s"}}"
+        });
+        $('#datetimepicker2').datetimepicker({
+            format: 'YYYY-MM-DD HH:MM',
+            defaultDate: "{{ end_date | date:"Y-m-d H:s"}}"
+        });
+    });
+
+</script>
 
 <script>
+    $(function () {
+        $('.vis_checkbox').on('change', function () {
+            var form = $(this).parents('form:first');
+            form.submit();
+        });
+    });
+</script>
+
+
+<script>
+
     var iconFeatures = []; // mark array
     var lineFeatures = []; // line array
 
-    {% for object in objects %} // objects-cycle
+    {% for object in points %} // objects-cycle
         {% for location in object.location_set.all %}
 
             // create marks for each vehicle
@@ -147,9 +179,20 @@
         style: lineStyle
     });
 
+      var coordinates = [[78.65, -32,65], [-98.65, 12.65]];
+
+    var layerLinesTest = new ol.layer.Vector({
+      source: new ol.source.Vector({
+          features: [new ol.Feature({
+              geometry: new ol.geom.LineString(coordinates),
+              name: 'Line'
+          })]
+      })
+  });
+
     // new map with all marks and lines
     var map = new ol.Map({
-        layers: [new ol.layer.Tile({source: new ol.source.OSM()}), vectorLayer, vectorLayerLines],
+        layers: [new ol.layer.Tile({source: new ol.source.OSM()}), vectorLayer, layerLinesTest],
         target: document.getElementById('map'),
         view: new ol.View({
             center: [0, 0],
@@ -169,8 +212,8 @@
     map.addOverlay(popup);
 
 
-    // display popup on click
-    map.on('click', function (evt) {
+    // display popup on mouse move
+    map.on('pointermove', function (evt) {
         var feature = map.forEachFeatureAtPixel(evt.pixel,
                 function (feature, layer) {
                     return feature;
@@ -191,6 +234,7 @@
                 'content': content
             });
             $(element).popover('show');
+
         } else {
             $(element).popover('destroy');
         }

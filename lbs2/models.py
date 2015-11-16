@@ -25,7 +25,7 @@ class User(AbstractUser):
         unique_together = ('email', )
 
 
-class Providers(models.Model):
+class Provider(models.Model):
 
     name = models.CharField(max_length=255, unique=True)
 
@@ -39,13 +39,14 @@ class Object(models.Model):
     valid_from = models.DateTimeField(null=False, default=datetime.now)
     valid_to = models.DateTimeField()
     created_by = models.IntegerField()
-    provider = models.ForeignKey(Providers, on_delete='NO ACTION')
+    provider = models.ForeignKey(Provider, on_delete='NO ACTION')
     created = models.DateTimeField(null=False, default=timezone.now())
     nofqueries = models.IntegerField(default=0)
     nofsqueries = models.IntegerField(default=0)
     lastquery = models.DateTimeField()
     active = models.NullBooleanField()
     users = models.ManyToManyField(User)
+    visible = models.BooleanField(default=True)
 
     def __unicode__(self):
         return self.name
@@ -65,3 +66,5 @@ class Setting(models.Model):
     name = models.CharField(max_length=255)
     value = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
+    max_objects = models.PositiveIntegerField()
+    max_points = models.PositiveIntegerField()

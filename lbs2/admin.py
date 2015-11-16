@@ -1,5 +1,5 @@
 from django.contrib import admin
-from lbs2.models import User, Object, Location, Providers
+from lbs2.models import User, Object, Location, Provider, Setting
 
 # Register your models here.
 
@@ -20,7 +20,12 @@ class ProviderAdmin(admin.ModelAdmin):
     list_display = ("name", )
 
 
+class SettingAdmin(admin.ModelAdmin):
+    list_display = ("max_objects", "max_points", )
+
+
 admin.site.register(User, UserAdmin)
 admin.site.register(Object, ObjectAdmin)
 admin.site.register(Location, LocationAdmin)
-admin.site.register(Providers, ProviderAdmin)
+admin.site.register(Provider, ProviderAdmin)
+admin.site.register(Setting, SettingAdmin)
