@@ -1,0 +1,15 @@
+{% extends 'lbs2/layout.html' %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block title %}
+    {% trans "Sign Up" %}
+{% endblock %}
+
+{% block content %}
+<h1>{% trans "Sign Up" %}</h1><hr>
+
+            {% include 'lbs2/partials/form_errors.html' %}
+
+            {% crispy form %}
+
+{% endblock content %}

@@ -1,0 +1,40 @@
+{% load i18n %}
+
+<div class="row main-row">
+    <div class="col-sm-4 col-md-3 sidebar sidebar-left pull-left">
+        <div class="panel-group sidebar-body" id="accordion-left">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a href="{% url 'home' %}">
+                            <i class="fa fa-list-alt"></i>
+                            Vehicles
+                        </a>
+                  <span class="pull-right slide-submenu">
+                    <i class="fa fa-chevron-left"></i>
+                  </span>
+                    </h4>
+                </div>
+                <div id="layers" class="panel-collapse collapse in">
+                    <div class="panel-body list-group">
+                        <ul class="veh-list">
+                            {% for object in objects_all %}
+
+                                <li>
+                                   <h4><a href="{% url 'home' %}?vehicle={{ object.id }}" class="">
+                                        {{ object.name }}
+                                    </a>
+                                    <a href="{% url 'vehicles_show' object.id %}"><small>(detail)</small></a>
+                                       </h4>
+                                </li>
+                            {% empty %}
+                                {% trans "You doesn't add vehicles yet :(" %}
+                            {% endfor %}
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

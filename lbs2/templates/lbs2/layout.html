@@ -1,0 +1,215 @@
+{% load staticfiles %}
+{% load i18n %}
+
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Kesniya Timofeiva">
+    <title>{% block title %}{% endblock %} &ndash; Map</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+    <!-- Font awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+    <!-- OpenLayers  css-->
+    <link rel="stylesheet" href="{% static 'css/ol.css' %}">
+
+    <!-- Custom css -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/media.css' %}">
+
+    <!-- animate css -->
+    <link rel="stylesheet" href="{% static 'css/animate.css' %}">
+
+    <style>body {
+    }
+
+    .starter-template {
+        padding: 40px 15px;
+        text-align: center;
+    }</style>
+
+    <!--[if IE]>
+        <script src="https://cdn.jsdelivr.net/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<div>
+
+    <!-- Navbar -->
+    {% include 'lbs2/partials/nav.html' %}
+</div>
+<div class="container-fluid main-content">
+
+    {% block content %}
+        {# Контент #}
+    {% endblock %}
+</div>
+
+
+<!-- Jquery and bootstrap -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+<!-- OpenLayers js -->
+<script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+
+<!-- Custom js -->
+<script src="{% static 'js/common.js' %}"></script>
+
+<!-- Custom js -->
+<script src="{% static 'js/ol.js' %}"></script>
+
+
+<script>
+    var iconFeatures = []; // mark array
+    var lineFeatures = []; // line array
+
+    {% for object in objects %} // objects-cycle
+        {% for location in object.location_set.all %}
+
+            // create marks for each vehicle
+            var iconFeature = new ol.Feature({
+                geometry: new ol.geom.Point(
+                        ol.proj.transform([{{ location.longitude }}, // add x
+                                    {{ location.latitude }}],// add y
+                                'EPSG:4326',
+                                'EPSG:3857'
+                        )),
+                name: '{{ object.name }}', // vehicle name
+                ts: '{{ location.ts }}', // vehicle location time
+            });
+
+            // add line feature
+            var layerLines = new ol.Feature({
+                geometry: new ol.geom.LineString([{{ location.longitude }},
+                                    {{ location.latitude }}]),
+                name: 'line'
+            });
+
+        {% endfor %}
+        iconFeatures.push(iconFeature); // push each object in arr
+        lineFeatures.push(layerLines);
+
+    {% endfor %}
+
+    // create vector for marks
+    var vectorSource = new ol.source.Vector({
+        features: iconFeatures//add an array of features
+    });
+
+    // create vector for lines
+    var vectorLineSource = new ol.source.Vector({
+        features: lineFeatures//add an array of features
+    });
+
+
+    // add style for marks
+    var iconStyle = new ol.style.Style({
+        image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+            anchor: [0.5, 46],
+            anchorXUnits: 'fraction',
+            anchorYUnits: 'pixels',
+            opacity: 0.75,
+            src: 'static/images/icon.png'
+        }))
+    });
+
+    // add style for lines
+    var lineStyle = new ol.style.Style({
+        image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+            anchor: [0.5, 46],
+            anchorXUnits: 'fraction',
+            anchorYUnits: 'pixels',
+            opacity: 0.75,
+            src: 'static/images/icon.png'
+        }))
+    });
+
+
+    // create layer for icons
+    var vectorLayer = new ol.layer.Vector({
+        source: vectorSource,
+        style: iconStyle
+    });
+
+    // create layer for marks
+    var vectorLayerLines = new ol.layer.Vector({
+        source: vectorLineSource,
+        style: lineStyle
+    });
+
+    // new map with all marks and lines
+    var map = new ol.Map({
+        layers: [new ol.layer.Tile({source: new ol.source.OSM()}), vectorLayer, vectorLayerLines],
+        target: document.getElementById('map'),
+        view: new ol.View({
+            center: [0, 0],
+            zoom: 2
+        })
+    });
+
+    // popup for marks
+    var element = document.getElementById('popup');
+
+    // add overlay on map
+    var popup = new ol.Overlay({
+        element: element,
+        positioning: 'bottom-center',
+        stopEvent: false
+    });
+    map.addOverlay(popup);
+
+
+    // display popup on click
+    map.on('click', function (evt) {
+        var feature = map.forEachFeatureAtPixel(evt.pixel,
+                function (feature, layer) {
+                    return feature;
+                });
+        if (feature) {
+            var geometry = feature.getGeometry();
+            var coord = geometry.getCoordinates();
+            popup.setPosition(coord);
+
+            //displaying content
+            var content = [
+                'Name:' + feature.get('name') + '<br>',
+                'Date:' + feature.get('ts') + '<br>',
+            ];
+            $(element).popover({
+                'placement': 'top',
+                'html': true,
+                'content': content
+            });
+            $(element).popover('show');
+        } else {
+            $(element).popover('destroy');
+        }
+    });
+
+    // change mouse cursor when over marker
+    $(map.getViewport()).on('mousemove', function (e) {
+        var pixel = map.getEventPixel(e.originalEvent);
+        var hit = map.forEachFeatureAtPixel(pixel, function (feature, layer) {
+            return true;
+        });
+        if (hit) {
+            map.getTarget().style.cursor = 'pointer';
+        } else {
+            map.getTarget().style.cursor = '';
+        }
+    });
+
+</script>
+
+</body>
+</html>
