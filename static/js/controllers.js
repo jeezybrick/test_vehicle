@@ -13,21 +13,25 @@ function HomeController($scope, MyVehicles, $mdDialog, olData) {
     $scope.vehiclesLoad = false;
     $scope.vehiclesLoadError = false;
     $scope.vectorLineLayer = '';
-
+    $scope.oldLayers = [];
 
     $scope.renderIcons = function () {
 
-        olData.getMap().then(function (map) {
-            if (angular.isDefined($scope.vectorLineLayer)) {
-                map.removeLayer($scope.vectorLineLayer);
-            }
-
-        });
 
         $scope.markers = [];
         $scope.coordinates = [];
 
+
         olData.getMap().then(function (map) {
+
+            if ($scope.oldLayers) {
+                for (var n = 0; n < $scope.oldLayers.length; n++) {
+                    map.removeLayer($scope.oldLayers[n]);
+                }
+                $scope.oldLayers = [];
+
+            }
+
             for (i = 0; i < $scope.vehicles.length; i++) {
 
                 if ($scope.vehicles[i].visible === true) {
@@ -86,6 +90,7 @@ function HomeController($scope, MyVehicles, $mdDialog, olData) {
 
 
                     map.addLayer($scope.vectorLineLayer);
+                    $scope.oldLayers.push($scope.vectorLineLayer);
                     $scope.coordinates = [];
 
                     //clean coordinates
