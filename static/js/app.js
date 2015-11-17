@@ -1,8 +1,7 @@
 
 angular
     .module('myApp', [
-        'ngRoute',
-        'ui.router',
+
         'ngResource',
         'ngMaterial',
         'ngAnimate',
@@ -10,8 +9,8 @@ angular
         'openlayers-directive'
 
     ])
-    .config(function ($locationProvider, $httpProvider, $resourceProvider, $interpolateProvider, $routeProvider,
-                      $compileProvider, $stateProvider, $urlRouterProvider) {
+    .config(function ($locationProvider, $httpProvider, $resourceProvider, $interpolateProvider,
+                      $compileProvider) {
 
         // CSRF Support
         $httpProvider.defaults.xsrfCookieName = 'csrftoken';
@@ -24,5 +23,6 @@ angular
         $interpolateProvider.startSymbol('[[').endSymbol(']]');
 
         $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension):/);
+
 
     });
