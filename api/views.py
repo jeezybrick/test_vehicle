@@ -14,9 +14,9 @@ class VehicleList(APIView):
 
     def get(self, request):
 
-        queryset = utils.sort_by_date(request)
+        queryset = request.user.object_set.all()
 
-        serializer = serializers.VehicleSerializer(queryset, many=True)
+        serializer = serializers.VehicleSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
 
 

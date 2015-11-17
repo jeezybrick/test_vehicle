@@ -18,6 +18,7 @@
               Latitude: <small>[[ location.latitude ]]</small>
               Distance: <small>[[ location.distance ]]</small>
           </h5>
+          <h5 ng-hide="vehicle.location_set.length">No locations :(</h5>
       </div>
     </md-dialog-content>
     <md-dialog-actions layout="row">
