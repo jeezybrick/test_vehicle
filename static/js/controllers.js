@@ -14,6 +14,7 @@ function HomeController($scope, MyVehicles, $mdDialog, olData) {
     $scope.vehiclesLoadError = false;
     $scope.vectorLineLayer = '';
     $scope.oldLayers = [];
+    $scope.lineColors = ['red', 'blue', '#00FF00'];
 
     $scope.renderIcons = function () {
 
@@ -83,8 +84,8 @@ function HomeController($scope, MyVehicles, $mdDialog, olData) {
                     $scope.vectorLineLayer = new ol.layer.Vector({
                         source: vectorLine,
                         style: new ol.style.Style({
-                            fill: new ol.style.Fill({color: '#00FF00', weight: 4}),
-                            stroke: new ol.style.Stroke({color: '#00FF00', width: 2})
+                            fill: new ol.style.Fill({color: $scope.lineColors[i], weight: 4}),
+                            stroke: new ol.style.Stroke({color: $scope.lineColors[i], width: 2})
                         })
                     });
 
@@ -198,7 +199,7 @@ function HomeController($scope, MyVehicles, $mdDialog, olData) {
         $scope.vehiclesLoadError = error;
 
     });
-    
+
 
 }
 
