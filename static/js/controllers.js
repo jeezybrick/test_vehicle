@@ -74,10 +74,14 @@ function HomeController($scope, MyVehicles, $mdDialog) {
 
 
     $scope.toggleVisibleVehicle = function (index) {
+        $scope.vehiclesLoad = false;
+
 
         $scope.vehicles[index].$update(function (response) {
 
             $scope.renderIcons();
+            $scope.vehiclesLoad = true;
+
         }, function (error) {
 
         });

@@ -31,3 +31,12 @@ class VehicleSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Object
         fields = ('id', 'name', 'created', 'users', 'visible', 'location_set', )
+
+
+class VehicleDetailSerializer(serializers.ModelSerializer):
+
+    location_set = LocationSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = models.Object
+        fields = ('id', 'name', 'created', 'users', 'visible', 'location_set', )

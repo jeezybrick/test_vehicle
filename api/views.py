@@ -37,7 +37,7 @@ class VehicleDetail(APIView):
 
     def put(self, request, pk, format=None):
         vehicle = self.get_object(pk)
-        serializer = serializers.VehicleSerializer(vehicle, data=request.data)
+        serializer = serializers.VehicleDetailSerializer(vehicle, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
