@@ -7,15 +7,15 @@
     </div>
 </div>
 
-<div id="map" class="map"></div>
 
 <div class="main-wrapper" ng-show="vehiclesLoad">
+    <openlayers ol-defaults="defaults" ol-center="center" ol-markers="markers" width="100%">
+        <ol-marker ng-repeat="marker in markers" lat="marker.lat" lon="marker.lon" message="test"></ol-marker>
+    </openlayers>
 
-
-    <div id="popup"></div>
 
     <!-- sidebar -->
-    <div class="row main-row">
+    <div class="row main-row sidebar">
         <div class="col-sm-4 col-md-3 sidebar sidebar-left pull-left">
             <div class="panel-group sidebar-body" id="accordion-left">
                 <div class="panel panel-default">
@@ -37,6 +37,9 @@
                         <md-content>
                             <md-datepicker ng-model="startDate" md-placeholder="Enter start date"></md-datepicker>
                             <md-datepicker ng-model="endDate" md-placeholder="Enter end date"></md-datepicker>
+                            <md-button class="sign-btn md-raised md-primary" ng-click="sortByDate()">
+                                Go!
+                            </md-button>
                         </md-content>
                         <div class="panel-body list-group">
 
@@ -44,8 +47,9 @@
                             <md-list ng-cloak>
                                 <md-subheader class="md-no-sticky">Choose vehicle</md-subheader>
                                 <md-list-item ng-repeat="vehicle in vehicles">
-                                    <md-checkbox class="md-secondary" ng-model="vehicle.visible"></md-checkbox>
-                                    <p> [[ vehicle.name ]] </p>
+                                    <md-checkbox class="md-secondary" ng-click="toggleVisibleVehicle($index)"
+                                                 ng-model="vehicle.visible"></md-checkbox>
+                                    <p ng-click="showReport($event, $index)"> [[ vehicle.name ]] </p>
                                     <md-icon class="md-secondary" ng-click="doSecondaryAction($event)" aria-label="Chat"
                                              md-svg-icon="/static/images/icon.png"></md-icon>
                                 </md-list-item>

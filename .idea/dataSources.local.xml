@@ -7,5 +7,8 @@
     <data-source name="SQLite - [2]" uuid="ebe30ac9-8ae8-41b2-8a88-92ae5db2472a">
       <secret-storage>master_key</secret-storage>
     </data-source>
+    <data-source name="SQLite - [3]" uuid="cd1ec47e-62a9-42cb-94a8-7a2d656bfcfb">
+      <secret-storage>master_key</secret-storage>
+    </data-source>
   </component>
 </project>

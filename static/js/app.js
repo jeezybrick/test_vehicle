@@ -7,6 +7,7 @@ angular
         'ngMaterial',
         'ngAnimate',
         'myApp.services',
+        'openlayers-directive'
 
     ])
     .config(function ($locationProvider, $httpProvider, $resourceProvider, $interpolateProvider, $routeProvider,

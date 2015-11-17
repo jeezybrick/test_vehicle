@@ -1,0 +1,29 @@
+<md-dialog aria-label="Report vehicle"  ng-cloak>
+  <form>
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>[[ vehicle.name ]]</h2>
+        <span flex></span>
+      </div>
+    </md-toolbar>
+    <md-dialog-content style="max-width:800px;max-height:810px; ">
+      <div class="md-dialog-content">
+        <h4>Created: <small>[[ vehicle.created | date:'medium' ]]</small></h4>
+          <hr>
+        <h4>Locations <small>([[ startDate | date:'medium']] - [[ endDate | date:'medium' ]])</small>
+        </h4>
+
+          <h5 ng-repeat="location in vehicle.location_set">
+              Longitude: <small>[[ location.longitude ]]</small>
+              Latitude: <small>[[ location.latitude ]]</small>
+              Distance: <small>[[ location.distance ]]</small>
+          </h5>
+      </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row">
+      <md-button class="pull-right" ng-click="closeDialog()" style="margin-right:20px;">
+        Okay!
+      </md-button>
+    </md-dialog-actions>
+  </form>
+</md-dialog>

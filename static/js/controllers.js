@@ -2,148 +2,132 @@ angular
     .module('myApp')
     .controller('HomeController', HomeController);
 
-function HomeController($scope, MyVehicles) {
-
+function HomeController($scope, MyVehicles, $mdDialog) {
     var i = 0,
-        j = 0;
+        j = 0,
+        backDays = 1;
+    $scope.markers = [];
     $scope.endDate = new Date();
     $scope.startDate = new Date();
+    $scope.startDate.setDate($scope.startDate.getDate() - backDays);
     $scope.vehiclesLoad = false;
     $scope.vehiclesLoadError = false;
 
-    $scope.vehicles = MyVehicles.query(function (response) {
 
-        $scope.iconFeatures = []; // mark array
+    $scope.renderIcons = function () {
 
+        $scope.markers = [];
         for (i = 0; i < $scope.vehicles.length; i++) {
+            if ($scope.vehicles[i].visible === true) {
+                // create marks for each vehicle
+                for (j = 0; j < $scope.vehicles[i].location_set.length; j++) {
 
-            // create marks for each vehicle
-            for (j = 0; j < $scope.vehicles[i].location_set.length; j++) {
+                    var temp = {
+                        name: $scope.vehicles[i].name,
+                        lon: $scope.vehicles[i].location_set[j].longitude,
+                        lat: $scope.vehicles[i].location_set[j].latitude,
+                        label: {
+                            message: 'Finisterre',
+                            show: true,
+                            showOnMouseOver: true
+                        },
+                        draggable: false
+                    };
 
-                var iconFeature = new ol.Feature({
-                    geometry: new ol.geom.Point(
-                        ol.proj.transform([$scope.vehicles[i].location_set[j].longitude, // add x
-                                $scope.vehicles[i].location_set[j].latitude],// add y
-                            'EPSG:4326',
-                            'EPSG:3857'
-                        )),
-                    name: $scope.vehicles[i].name, // vehicle name
-                    ts: moment($scope.vehicles[i].location_set[j].ts).format('YYYY-MM-DD'), // vehicle location time
-                });
+                    $scope.markers.push(temp); // push each object in arr
 
-                $scope.iconFeatures.push(iconFeature); // push each object in arr
-
+                }
             }
 
         }
 
-        // create vector for marks
-        var vectorSource = new ol.source.Vector({
-            features: $scope.iconFeatures//add an array of features
-        });
+        angular.extend($scope, {
+            center: {
+                lat: 0,
+                lon: 0,
+                autodiscover: true
+            },
 
-        // add style for marks
-        var iconStyle = new ol.style.Style({
-            image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
-                anchor: [0.5, 46],
-                anchorXUnits: 'fraction',
-                anchorYUnits: 'pixels',
-                opacity: 0.75,
-                src: 'static/images/icon.png'
-            }))
-        });
-
-        // add style for lines
-        var lineStyle = new ol.style.Style({
-            image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
-                anchor: [0.5, 46],
-                anchorXUnits: 'fraction',
-                anchorYUnits: 'pixels',
-                opacity: 0.75,
-                src: 'static/images/icon.png'
-            }))
-        });
-
-
-        // create layer for icons
-        var vectorLayer = new ol.layer.Vector({
-            source: vectorSource,
-            style: iconStyle
-        });
-
-        var coordinates = [[78.65, -32, 65], [-98.65, 12.65]];
-
-        var layerLinesTest = new ol.layer.Vector({
-            source: new ol.source.Vector({
-                features: [new ol.Feature({
-                    geometry: new ol.geom.LineString(coordinates),
-                    name: 'Line'
-                })]
-            })
-        });
-
-        // new map with all marks and lines
-        var map = new ol.Map({
-            layers: [new ol.layer.Tile({source: new ol.source.OSM()}), vectorLayer, layerLinesTest],
-            target: document.getElementById('map'),
-            view: new ol.View({
-                center: [0, 0],
-                zoom: 2
-            })
-        });
-
-        // popup for marks
-        var element = document.getElementById('popup');
-
-        // add overlay on map
-        var popup = new ol.Overlay({
-            element: element,
-            positioning: 'bottom-center',
-            stopEvent: false
-        });
-        map.addOverlay(popup);
-
-
-        // display popup on mouse move
-        map.on('pointermove', function (evt) {
-            var feature = map.forEachFeatureAtPixel(evt.pixel,
-                function (feature, layer) {
-                    return feature;
-                });
-            if (feature) {
-                var geometry = feature.getGeometry();
-                var coord = geometry.getCoordinates();
-                popup.setPosition(coord);
-
-                //displaying content
-                var content = [
-                    'Name:' + feature.get('name') + '<br>',
-                    'Date:' + feature.get('ts') + '<br>',
-                ];
-                $(element).popover({
-                    'placement': 'top',
-                    'html': true,
-                    'content': content
-                });
-                $(element).popover('show');
-
-            } else {
-                $(element).popover('destroy');
+            markers: $scope.markers,
+            defaults: {
+                layers: {
+                    main: {
+                        source: {
+                            type: 'OSM',
+                            url: 'http://{a-c}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png'
+                        }
+                    }
+                },
+                interactions: {
+                    mouseWheelZoom: true
+                },
+                controls: {
+                    zoom: false,
+                    rotate: false,
+                    attribution: false
+                }
             }
+
         });
 
-        // change mouse cursor when over marker
-        $(map.getViewport()).on('mousemove', function (e) {
-            var pixel = map.getEventPixel(e.originalEvent);
-            var hit = map.forEachFeatureAtPixel(pixel, function (feature, layer) {
-                return true;
+    };
+
+
+    $scope.toggleVisibleVehicle = function (index) {
+
+        $scope.vehicles[index].$update(function (response) {
+
+            $scope.renderIcons();
+        }, function (error) {
+
+        });
+
+    };
+
+    $scope.sortByDate = function () {
+        $scope.vehiclesLoad = false;
+
+        $scope.vehicles = MyVehicles.query(params = {
+            date_from: $scope.startDate,
+            date_to: $scope.endDate
+        }, function () {
+            $scope.renderIcons();
+            $scope.vehiclesLoad = true;
+
+        }, function () {
+            $scope.vehiclesLoadError = false;
+        });
+
+    };
+
+    $scope.showReport = function (ev, index) {
+
+        $scope.chooseVehicle = $scope.vehicles[index];
+
+        $mdDialog.show({
+            controller: ModalController,
+            templateUrl: 'static/modals/report_modal.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose: true,
+            locals: {
+                vehicle: $scope.vehicles[index],
+                startDate: $scope.startDate,
+                endDate: $scope.endDate
+            }
+        })
+            .then(function () {
+
+            }, function () {
+
             });
-            if (hit) {
-                map.getTarget().style.cursor = 'pointer';
-            } else {
-                map.getTarget().style.cursor = '';
-            }
-        });
+
+    };
+
+
+    $scope.vehicles = MyVehicles.query(function (response) {
+
+        $scope.renderIcons();
 
         $scope.vehiclesLoad = true;
 
@@ -203,5 +187,22 @@ function HomeController($scope, MyVehicles) {
         applyInitialUIState();
         applyMargins();
     });
+
+}
+
+
+angular
+    .module('myApp')
+    .controller('ModalController', ModalController);
+
+function ModalController($scope, $mdDialog, vehicle, startDate, endDate) {
+
+    $scope.vehicle = vehicle;
+    $scope.endDate = startDate;
+    $scope.startDate = endDate;
+
+    $scope.closeDialog = function() {
+          $mdDialog.hide();
+        }
 
 }

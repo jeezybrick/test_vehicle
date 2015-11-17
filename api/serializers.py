@@ -7,11 +7,11 @@ class LocationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Location
-        fields = ('id', 'ts', 'longitude', 'latitude', )
+        fields = ('ts', 'longitude', 'latitude', 'distance', )
 
 
 class VehicleSerializer(serializers.ModelSerializer):
-    location_set = LocationSerializer(many=True)
+    location_set = LocationSerializer(many=True, read_only=True)
 
     class Meta:
         model = models.Object

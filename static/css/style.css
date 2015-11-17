@@ -80,3 +80,15 @@ body {
 .navbar{
     z-index: 999;
 }
+
+.sidebar{
+    position: fixed;
+    top: 140px;
+    left:40px;
+    z-index: 9;
+}
+.mini-submenu,  .mini-submenu-left {
+    top:140px;
+    left:20px;
+
+}
