@@ -26,41 +26,73 @@ function HomeController($scope, MyVehicles, $mdDialog, olData) {
 
         $scope.markers = [];
         $scope.coordinates = [];
-        for (i = 0; i < $scope.vehicles.length; i++) {
-            if ($scope.vehicles[i].visible === true) {
-                // create marks for each vehicle
-                for (j = 0; j < $scope.vehicles[i].location_set.length; j++) {
 
-                    var temp = {
-                        name: $scope.vehicles[i].name,
-                        lon: $scope.vehicles[i].location_set[j].longitude,
-                        lat: $scope.vehicles[i].location_set[j].latitude,
-                        label: {
-                            message: '<div class="vehicle-popup">' +
-                            '<h3>ts:<small>' + moment($scope.vehicles[i].location_set[j].ts).format('YYYY-MM-DD') + '</small></hr>' +
-                            '<h3>name:<small>' + $scope.vehicles[i].name + '</small></hr>' +
-                            '<h3>longitude:<small>' + $scope.vehicles[i].location_set[j].longitude + '</small></hr>' +
-                            '<h3>latitude:<small>' + $scope.vehicles[i].location_set[j].latitude + '</small></hr>' +
-                            '</div>',
-                            show: false,
-                            showOnMouseOver: true
-                        },
-                        draggable: true
-                    };
+        olData.getMap().then(function (map) {
+            for (i = 0; i < $scope.vehicles.length; i++) {
 
-                    $scope.markers.push(temp); // push each object in arr
+                if ($scope.vehicles[i].visible === true) {
+                    // create marks for each vehicle
+                    for (j = 0; j < $scope.vehicles[i].location_set.length; j++) {
 
-                    // push coordinates here
 
+                        var temp = {
+                            name: $scope.vehicles[i].name,
+                            lon: $scope.vehicles[i].location_set[j].longitude,
+                            lat: $scope.vehicles[i].location_set[j].latitude,
+                            label: {
+                                message: '<div class="vehicle-popup">' +
+                                '<h3>ts:<small>' + moment($scope.vehicles[i].location_set[j].ts).format('YYYY-MM-DD') + '</small></hr>' +
+                                '<h3>name:<small>' + $scope.vehicles[i].name + '</small></hr>' +
+                                '<h3>longitude:<small>' + $scope.vehicles[i].location_set[j].longitude + '</small></hr>' +
+                                '<h3>latitude:<small>' + $scope.vehicles[i].location_set[j].latitude + '</small></hr>' +
+                                '</div>',
+                                show: false,
+                                showOnMouseOver: true
+                            },
+                            draggable: true
+                        };
+
+                        $scope.markers.push(temp); // push each object in arr
+                        $scope.coordinates.push([temp.lon, temp.lat]);
+
+                        // push coordinates here
+
+                    }
+
+                    //function
+
+                    // map.removeLayer($scope.vectorLineLayer);
+                    var points = [];
+
+                    for (var q = 0; q < $scope.coordinates.length; q++) {
+
+                        points[q] = ol.proj.transform($scope.coordinates[q], 'EPSG:4326', 'EPSG:3857');
+                    }
+
+                    var featureLine = new ol.Feature({
+                        geometry: new ol.geom.LineString(points)
+                    });
+
+                    var vectorLine = new ol.source.Vector({});
+                    vectorLine.addFeature(featureLine);
+
+                    $scope.vectorLineLayer = new ol.layer.Vector({
+                        source: vectorLine,
+                        style: new ol.style.Style({
+                            fill: new ol.style.Fill({color: '#00FF00', weight: 4}),
+                            stroke: new ol.style.Stroke({color: '#00FF00', width: 2})
+                        })
+                    });
+
+
+                    map.addLayer($scope.vectorLineLayer);
+                    $scope.coordinates = [];
+
+                    //clean coordinates
                 }
 
-                //function
-
-                //clean coordinates
             }
-
-        }
-
+        });
         angular.extend($scope, {
             center: {
                 lat: 0,
@@ -90,33 +122,6 @@ function HomeController($scope, MyVehicles, $mdDialog, olData) {
 
         });
 
-        olData.getMap().then(function (map) {
-            // map.removeLayer($scope.vectorLineLayer);
-            var points = [];
-
-            for (var i = 0; i < $scope.markers.length; i++) {
-                points[i] = ol.proj.transform([$scope.markers[i].lon, $scope.markers[i].lat], 'EPSG:4326', 'EPSG:3857');
-            }
-
-            var featureLine = new ol.Feature({
-                geometry: new ol.geom.LineString(points)
-            });
-
-            var vectorLine = new ol.source.Vector({});
-            vectorLine.addFeature(featureLine);
-
-            $scope.vectorLineLayer = new ol.layer.Vector({
-                source: vectorLine,
-                style: new ol.style.Style({
-                    fill: new ol.style.Fill({color: '#00FF00', weight: 4}),
-                    stroke: new ol.style.Stroke({color: '#00FF00', width: 2})
-                })
-            });
-
-
-            map.addLayer($scope.vectorLineLayer);
-
-        });
 
     };
 
@@ -250,8 +255,8 @@ angular
 function ModalController($scope, $mdDialog, vehicle, startDate, endDate) {
 
     $scope.vehicle = vehicle;
-    $scope.endDate = startDate;
-    $scope.startDate = endDate;
+    $scope.endDate = endDate;
+    $scope.startDate = startDate;
 
     $scope.closeDialog = function () {
         $mdDialog.hide();
