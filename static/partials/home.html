@@ -1,3 +1,4 @@
+
 <!-- preloader -->
 <div class="row" ng-hide="vehiclesLoad">
     <div class="wrapper col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
@@ -9,8 +10,9 @@
 
 
 <div class="main-wrapper" ng-show="vehiclesLoad">
+
     <openlayers ol-defaults="defaults" ol-center="center" ol-markers="markers" width="100%">
-        <ol-marker ng-repeat="marker in markers" lat="marker.lat" lon="marker.lon" message="test"></ol-marker>
+        <ol-marker ng-repeat="marker in markers" lat="marker.lat" lon="marker.lon" ol-marker-properties="marker"></ol-marker>
     </openlayers>
 
 

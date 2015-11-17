@@ -25,18 +25,4 @@ angular
 
         $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension):/);
 
-        // Routing
-        $urlRouterProvider.otherwise('/');
-        $stateProvider
-            .state('home', {
-                url: '/',
-                templateUrl: '/static/partials/home.html',
-                controller: 'HomeController'
-            })
-            .state('otherwise', {
-                url : '*path',
-                templateUrl: '/static/partials/home.html',
-                controller: 'HomeController'
-            })
-
     });

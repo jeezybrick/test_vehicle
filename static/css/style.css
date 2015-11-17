@@ -92,3 +92,13 @@ body {
     left:20px;
 
 }
+.vehicle-popup{
+    background-color: #fff;
+    padding: 10px;
+}
+.popup-label{
+    position: fixed;
+    bottom: 0;
+    z-index: 0;
+    visibility: hidden;
+}

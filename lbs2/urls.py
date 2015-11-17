@@ -9,9 +9,6 @@ urlpatterns = [
     # Home view
     url(r"^$", views.HomeView.as_view(), name='home'),
 
-    # vehicle detail
-    url(r"^vehicles/(?P<pk>\w+)/$",
-        views.VehicleDetailView.as_view(), name='vehicles_show'),
 
     # Auth views
     url(r'^auth/login/$', views.LoginView.as_view(), name='login'),

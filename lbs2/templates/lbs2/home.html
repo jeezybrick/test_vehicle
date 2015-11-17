@@ -6,6 +6,100 @@
 {% endblock %}
 
 {% block content %}
-    <div ui-view ng-cloak></div>
+   {% if user.is_authenticated %}
+
+    <div ng-controller="HomeController" ng-cloak>
+        <!-- preloader -->
+        <div class="row" ng-hide="vehiclesLoad">
+            <div class="wrapper col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+                <div layout="row" layout-align="space-around">
+                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="main-wrapper" ng-show="vehiclesLoad">
+
+            <openlayers ol-defaults="defaults" ol-center="center" ol-markers="markers" width="100%">
+                <ol-marker ng-repeat="marker in markers" lat="marker.lat" lon="marker.lon"
+                           ol-marker-properties="marker"></ol-marker>
+            </openlayers>
+
+
+            <!-- sidebar -->
+            <div class="row main-row sidebar">
+                <div class="col-sm-4 col-md-3 sidebar sidebar-left pull-left">
+                    <div class="panel-group sidebar-body" id="accordion-left">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a href="javascript:void(0);" ng-click="showAllVehicles()">
+                                        <i class="fa fa-list-alt"></i>
+                                        Vehicles
+                                    </a>
+                  <span class="pull-right slide-submenu">
+                    <i class="fa fa-chevron-left"></i>
+                  </span>
+                                </h4>
+                            </div>
+                            <div id="layers" class="panel-collapse collapse in">
+                                <h4>Choose date range</h4>
+
+                                <!-- Date range form -->
+                                <md-content>
+                                    <md-datepicker ng-model="startDate"
+                                                   md-placeholder="Enter start date"></md-datepicker>
+                                    <md-datepicker ng-model="endDate" md-placeholder="Enter end date"></md-datepicker>
+                                    <md-button class="sign-btn md-raised md-primary" ng-click="sortByDate()">
+                                        Go!
+                                    </md-button>
+                                </md-content>
+                                <div class="panel-body list-group">
+
+                                    <!-- List of objects -->
+                                    <md-list ng-cloak>
+                                        <md-subheader class="md-no-sticky">Choose vehicle</md-subheader>
+                                        <md-list-item ng-repeat="vehicle in vehicles">
+                                            <md-checkbox class="md-secondary" ng-click="toggleVisibleVehicle($index)"
+                                                         ng-model="vehicle.visible"></md-checkbox>
+                                            <p ng-click="showReport($event, $index)"> [[ vehicle.name ]] </p>
+                                            <md-icon class="md-secondary" ng-click="doSecondaryAction($event)"
+                                                     aria-label="Chat"
+                                                     md-svg-icon="/static/images/icon.png"></md-icon>
+                                        </md-list-item>
+                                    </md-list>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="mini-submenu mini-submenu-left pull-left">
+                <i class="fa fa-list-alt"></i>
+            </div>
+
+        </div>
+    </div>
+
+    {% else %}
+
+         <div class="starter-template">
+        <p class="lead animated zoomIn">
+            <h2 class="main-greet animated fadeInUp">
+
+                    {% trans "Welcome" %}!<br>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 animated fadeInUp">
+                        <a href="{% url 'register' %}">{% trans "Sign Up" %}</a> or
+                        <a href="{% url 'login' %}"> {% trans "Sign In" %}</a> on web site.
+                    </div>
+
+            </h2>
+        </p>
+    </div>
+    {% endif %}
 
 {% endblock %}

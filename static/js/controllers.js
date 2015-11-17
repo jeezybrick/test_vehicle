@@ -27,11 +27,17 @@ function HomeController($scope, MyVehicles, $mdDialog) {
                         lon: $scope.vehicles[i].location_set[j].longitude,
                         lat: $scope.vehicles[i].location_set[j].latitude,
                         label: {
-                            message: 'Finisterre',
-                            show: true,
+                            message:
+                                '<div class="vehicle-popup">' +
+                                '<h3>ts:<small>'+ moment($scope.vehicles[i].location_set[j].ts).format('YYYY-MM-DD')+ '</small></hr>'+
+                                '<h3>name:<small>'+ $scope.vehicles[i].name + '</small></hr>'+
+                                '<h3>longitude:<small>'+ $scope.vehicles[i].location_set[j].longitude + '</small></hr>'+
+                                '<h3>latitude:<small>'+ $scope.vehicles[i].location_set[j].latitude + '</small></hr>'+
+                                '</div>',
+                            show: false,
                             showOnMouseOver: true
                         },
-                        draggable: false
+                        draggable: true
                     };
 
                     $scope.markers.push(temp); // push each object in arr
