@@ -88,7 +88,7 @@ body {
     z-index: 9;
 }
 .mini-submenu,  .mini-submenu-left {
-    top:140px;
+    top:70px;
     left:20px;
 
 }
@@ -98,4 +98,8 @@ body {
 }
 .popup-label{
     display: none;
+}
+
+.map-wrapper{
+    height:100vh;
 }

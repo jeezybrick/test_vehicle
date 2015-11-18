@@ -1,3 +1,15 @@
 # test_vehicle
+Django base + Angular js + Django REST for API
 
-PostgreSQL, SQL Alchemy, OpenLayers 3, OSM, bootstrap, jQuery
+Test user:
+username:admin
+password:1
+
+Launch follow command in virtualenv for install requirements:
+pip install -r requirements.txt
+
+For migration:
+python manage.py migrate
+
+For launch app:
+python manage.py runserver

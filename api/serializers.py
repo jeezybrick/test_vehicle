@@ -31,7 +31,7 @@ class VehicleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Object
-        fields = ('id', 'name', 'created', 'users', 'visible', 'location_set', )
+        fields = ('id', 'name', 'created', 'users', 'is_visible', 'location_set', )
 
 
 class VehicleDetailSerializer(serializers.ModelSerializer):
@@ -40,7 +40,7 @@ class VehicleDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Object
-        fields = ('id', 'name', 'created', 'users', 'visible', 'location_set', )
+        fields = ('id', 'name', 'created', 'users', 'is_visible', 'location_set', )
 
 
 class SettingsSerializer(serializers.ModelSerializer):

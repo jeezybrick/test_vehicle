@@ -47,7 +47,7 @@ function HomeController($scope, MyVehicles, $mdDialog, olData, Settings) {
 
             for (i = 0; i < $scope.vehicles.length; i++) {
 
-                if ($scope.vehicles[i].visible === true) {
+                if ($scope.vehicles[i].is_visible === true) {
                     // create marks for each vehicle
                     for (j = 0; j < $scope.vehicles[i].location_set.length; j++) {
 
@@ -125,9 +125,9 @@ function HomeController($scope, MyVehicles, $mdDialog, olData, Settings) {
             center: {
                 lat: 0,
                 lon: 0,
+                zoom:2,
                 autodiscover: true
             },
-
             markers: $scope.markers,
             defaults: {
                 layers: {
