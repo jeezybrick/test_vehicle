@@ -1,14 +1,12 @@
-from datetime import datetime
-from django.shortcuts import render, redirect
+
+from django.shortcuts import render
 from django.views.generic import View
 from django.http import HttpResponseRedirect
 from django.utils.translation import ugettext_lazy as _
 from django.template.response import TemplateResponse
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.core.urlresolvers import reverse
-from django.core.exceptions import ObjectDoesNotExist
-from django.utils.datastructures import MultiValueDictKeyError
-from lbs2 import forms, models, utils
+from lbs2 import forms
 
 
 # For login

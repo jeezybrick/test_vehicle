@@ -6,21 +6,13 @@
 {% endblock %}
 
 {% block content %}
+
+    <!-- Content for auth users -->
     {% if user.is_authenticated %}
 
         <div ng-controller="HomeController" ng-cloak>
 
-            <!-- preloader -->
-            <div class="row" ng-hide="vehiclesLoad">
-                <div class="wrapper col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
-                    <div layout="row" layout-align="space-around">
-                        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="main-wrapper col-lg-12 col-md-12 col-sm-12 col-xs-12" ng-show="vehiclesLoad">
+            <div class="main-wrapper col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
                 <div class="map-wrapper">
                     <!-- Openlayers map -->
@@ -48,6 +40,8 @@
                                     </h4>
                                 </div>
                                 <div id="layers" class="panel-collapse collapse in">
+
+
                                     <h4>{% trans "Choose date range" %}</h4>
 
                                     <!-- Date range form -->
@@ -61,10 +55,10 @@
                                         </md-button>
                                     </md-content>
                                     <div class="panel-body list-group">
-
                                         <!-- List of objects -->
                                         <md-list ng-cloak>
-                                            <md-subheader class="md-no-sticky">{% trans "Choose vehicle" %}</md-subheader>
+                                            <md-subheader
+                                                    class="md-no-sticky">{% trans "Choose vehicle" %}</md-subheader>
                                             <md-list-item ng-repeat="vehicle in vehicles">
                                                 <md-checkbox class="md-secondary"
                                                              ng-click="toggleVisibleVehicle($index)"
@@ -73,6 +67,18 @@
                                             </md-list-item>
                                         </md-list>
                                         <h5 ng-hide="vehicles.length">{% trans "No vehicles" %}</h5>
+
+                                        <!-- vehicles loader -->
+                                        <div class="my-preloader row" ng-hide="vehiclesLoad">
+                                            <div class="wrapper col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+                                                <div layout="row" layout-align="space-around">
+                                                    <md-progress-circular
+                                                            md-mode="indeterminate"
+                                                            md-diameter="24"></md-progress-circular>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>

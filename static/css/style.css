@@ -1,6 +1,10 @@
 #login_nav {
     margin-right: 15px;
 }
+.navbar {
+    z-index: 40 !important;
+}
+
 
 .navbar-header > button {
     margin-left: 20px;
@@ -14,17 +18,6 @@ body {
     margin-top: 50px;
 }
 
-#map {
-    position: absolute;
-    top: 50px;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
-}
-
-#map .ol-zoom {
-    font-size: 1.2em;
-}
 
 .zoom-top-opened-sidebar {
     margin-top: 5px;
@@ -52,9 +45,6 @@ body {
     z-index: 40;
 }
 
-#map {
-    z-index: 35;
-}
 
 .sidebar {
     z-index: 45;
@@ -105,4 +95,7 @@ body {
 }
 md-toast.md-error-toast-theme {
     background-color: #a94442;
+}
+.my-preloader{
+
 }
