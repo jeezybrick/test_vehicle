@@ -7,6 +7,7 @@ function HomeController($scope, MyVehicles, $mdDialog, olData, Settings) {
     //init
     var i = 0,
         j = 0,
+        q = 0,
         w = 0, // var for max_points limit
         backDays = 1; // 24 hours start date
 
@@ -35,7 +36,7 @@ function HomeController($scope, MyVehicles, $mdDialog, olData, Settings) {
         olData.getMap().then(function (map) {
 
             /**
-             * remove previous layers form map
+             * remove previous layers from map
              */
             if ($scope.oldLayers) {
                 for (var n = 0; n < $scope.oldLayers.length; n++) {
@@ -86,7 +87,7 @@ function HomeController($scope, MyVehicles, $mdDialog, olData, Settings) {
 
                     var points = []; // coordinates for lines
 
-                    for (var q = 0; q < $scope.coordinates.length; q++) {
+                    for (q = 0; q < $scope.coordinates.length; q++) {
 
                         points[q] = ol.proj.transform($scope.coordinates[q], 'EPSG:4326', 'EPSG:3857');
                     }
@@ -126,7 +127,7 @@ function HomeController($scope, MyVehicles, $mdDialog, olData, Settings) {
                 lat: 0,
                 lon: 0,
                 zoom:2,
-                autodiscover: true
+               // autodiscover: true // for discover your current position
             },
             markers: $scope.markers,
             defaults: {
