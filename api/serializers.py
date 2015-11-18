@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime
+from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 from lbs2 import models
 
@@ -42,6 +43,15 @@ class VehicleDetailSerializer(serializers.ModelSerializer):
         model = models.Object
         fields = ('id', 'name', 'created', 'users', 'is_visible', 'location_set', )
 
+    # validate max selected elements
+    def validate_is_visible(self, is_visible):
+
+        if is_visible:
+            max_objects = models.Setting.objects.get(id=1).max_objects
+            count_of_visible_vehicles = models.Object.objects.filter(is_visible=True).count()
+            if count_of_visible_vehicles >= max_objects:
+                raise serializers.ValidationError(_("Max visible vehicles is " + str(max_objects)))
+        return is_visible
 
 class SettingsSerializer(serializers.ModelSerializer):
 
