@@ -2,7 +2,7 @@ angular
     .module('myApp')
     .controller('HomeController', HomeController);
 
-function HomeController($scope, MyVehicles, $mdDialog,$mdToast,  olData, Settings) {
+function HomeController($scope, MyVehicles, $mdDialog, $mdToast, olData, Settings) {
 
     //init
     var i = 0,
@@ -21,27 +21,30 @@ function HomeController($scope, MyVehicles, $mdDialog,$mdToast,  olData, Setting
     $scope.oldLayers = [];
     $scope.lineColors = ['red', 'blue', '#00FF00']; // colors of lines
 
-     var last = {
-      bottom: true,
-      top: false,
-      left: true,
-      right: false
+    // toast position
+    var last = {
+        bottom: true,
+        top: false,
+        left: true,
+        right: false
     };
-  $scope.toastPosition = angular.extend({},last);
-  $scope.getToastPosition = function() {
-    sanitizePosition();
-    return Object.keys($scope.toastPosition)
-      .filter(function(pos) { return $scope.toastPosition[pos]; })
-      .join(' ');
-  };
-  function sanitizePosition() {
-    var current = $scope.toastPosition;
-    if ( current.bottom && last.top ) current.top = false;
-    if ( current.top && last.bottom ) current.bottom = false;
-    if ( current.right && last.left ) current.left = false;
-    if ( current.left && last.right ) current.right = false;
-    last = angular.extend({},current);
-  }
+    $scope.toastPosition = angular.extend({}, last);
+    $scope.getToastPosition = function () {
+        sanitizePosition();
+        return Object.keys($scope.toastPosition)
+            .filter(function (pos) {
+                return $scope.toastPosition[pos];
+            })
+            .join(' ');
+    };
+    function sanitizePosition() {
+        var current = $scope.toastPosition;
+        if (current.bottom && last.top) current.top = false;
+        if (current.top && last.bottom) current.bottom = false;
+        if (current.right && last.left) current.left = false;
+        if (current.left && last.right) current.right = false;
+        last = angular.extend({}, current);
+    }
 
 
     /**
@@ -144,12 +147,16 @@ function HomeController($scope, MyVehicles, $mdDialog,$mdToast,  olData, Setting
             }
 
         });
-        angular.extend($scope, {
+
+    };
+
+    // set map settings
+    angular.extend($scope, {
             center: {
                 lat: 0,
                 lon: 0,
-                zoom:2,
-               // autodiscover: true // for discover your current position
+                zoom: 2,
+                autodiscover: true // for discover your current position
             },
             markers: $scope.markers,
             defaults: {
@@ -165,17 +172,13 @@ function HomeController($scope, MyVehicles, $mdDialog,$mdToast,  olData, Setting
                     mouseWheelZoom: true
                 },
                 controls: {
-                    zoom: false,
+                    zoom: true,
                     rotate: false,
                     attribution: false
                 }
             }
 
         });
-
-
-    };
-
 
     /**
      * toggle checkbox of vehicle visibility
@@ -193,13 +196,13 @@ function HomeController($scope, MyVehicles, $mdDialog,$mdToast,  olData, Setting
             $scope.maxVisibleVehiclesError = error.data.is_visible.toString();
 
             // error toast
-        $mdToast.show(
-          $mdToast.simple()
-            .content($scope.maxVisibleVehiclesError)
-            .position($scope.getToastPosition())
-            .hideDelay(3000)
-              .theme('error-toast')
-        );
+            $mdToast.show(
+                $mdToast.simple()
+                    .content($scope.maxVisibleVehiclesError)
+                    .position($scope.getToastPosition())
+                    .hideDelay(3000)
+                    .theme('error-toast')
+            );
 
 
             $scope.vehiclesLoad = true;
