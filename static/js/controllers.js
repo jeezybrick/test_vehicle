@@ -190,13 +190,15 @@ function HomeController($scope, MyVehicles, $mdDialog,$mdToast,  olData, Setting
             $scope.vehiclesLoad = true;
 
         }, function (error) {
-            $scope.maxVisibleVehiclesError = error.data.is_visible.toString()
+            $scope.maxVisibleVehiclesError = error.data.is_visible.toString();
 
+            // error toast
         $mdToast.show(
           $mdToast.simple()
             .content($scope.maxVisibleVehiclesError)
             .position($scope.getToastPosition())
             .hideDelay(3000)
+              .theme('error-toast')
         );
 
 

@@ -103,3 +103,6 @@ body {
 .map-wrapper{
     height:100vh;
 }
+md-toast.md-error-toast-theme {
+    background-color: #a94442;
+}
