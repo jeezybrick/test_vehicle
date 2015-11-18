@@ -2,12 +2,14 @@ angular
     .module('myApp')
     .controller('HomeController', HomeController);
 
-function HomeController($scope, MyVehicles, $mdDialog, olData) {
+function HomeController($scope, MyVehicles, $mdDialog, olData, Settings) {
 
     //init
     var i = 0,
         j = 0,
+        w = 0, // var for max_points limit
         backDays = 1; // 24 hours start date
+
     $scope.markers = [];
     $scope.endDate = new Date();
     $scope.startDate = new Date();
@@ -27,6 +29,7 @@ function HomeController($scope, MyVehicles, $mdDialog, olData) {
 
         $scope.markers = [];
         $scope.coordinates = [];
+        w = 0;
 
 
         olData.getMap().then(function (map) {
@@ -48,17 +51,21 @@ function HomeController($scope, MyVehicles, $mdDialog, olData) {
                     // create marks for each vehicle
                     for (j = 0; j < $scope.vehicles[i].location_set.length; j++) {
 
+                        w++; // var for max_points limit
+
                         // vehicle detail
                         var temp = {
                             name: $scope.vehicles[i].name,
                             lon: $scope.vehicles[i].location_set[j].longitude,
                             lat: $scope.vehicles[i].location_set[j].latitude,
+
+                            // popup message and settings
                             label: {
                                 message: '<div class="vehicle-popup">' +
-                                '<h3>ts:<small>' + moment($scope.vehicles[i].location_set[j].ts).format('YYYY-MM-DD') + '</small></hr>' +
-                                '<h3>name:<small>' + $scope.vehicles[i].name + '</small></hr>' +
-                                '<h3>longitude:<small>' + $scope.vehicles[i].location_set[j].longitude + '</small></hr>' +
-                                '<h3>latitude:<small>' + $scope.vehicles[i].location_set[j].latitude + '</small></hr>' +
+                                '<h4>Ts:<small>' + moment($scope.vehicles[i].location_set[j].ts).format('YYYY-MM-DD') + '</small></h4>' +
+                                '<h4>Name:<small>' + $scope.vehicles[i].name + '</small></h4>' +
+                                '<h4>Longitude:<small>' + $scope.vehicles[i].location_set[j].longitude + '</small></h4>' +
+                                '<h4>Latitude:<small>' + $scope.vehicles[i].location_set[j].latitude + '</small></h4>' +
                                 '</div>',
                                 show: false,
                                 showOnMouseOver: true
@@ -68,6 +75,11 @@ function HomeController($scope, MyVehicles, $mdDialog, olData) {
 
                         $scope.markers.push(temp); // push each object detail in arr
                         $scope.coordinates.push([temp.lon, temp.lat]); // locations of each vehicle
+
+                        // break loop if max_points <= draw points
+                        if ($scope.settings.max_points <= w) {
+                            break;
+                        }
 
 
                     }
@@ -102,7 +114,12 @@ function HomeController($scope, MyVehicles, $mdDialog, olData) {
 
                 }
 
+                // break loop if max_points <= draw points
+                if ($scope.settings.max_points <= w) {
+                    break;
+                }
             }
+
         });
         angular.extend($scope, {
             center: {
@@ -202,7 +219,19 @@ function HomeController($scope, MyVehicles, $mdDialog, olData) {
 
     };
 
-     /**
+    /**
+     * get settings
+     */
+
+    $scope.settings = Settings.query(function (response) {
+
+
+    }, function (error) {
+
+
+    });
+
+    /**
      * get list of vehicles
      */
 

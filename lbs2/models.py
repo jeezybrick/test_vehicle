@@ -33,6 +33,7 @@ class Provider(models.Model):
         return self.name
 
 
+# Vehicle model
 class Object(models.Model):
 
     name = models.CharField(max_length=50, unique=True)

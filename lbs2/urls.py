@@ -6,10 +6,6 @@ from lbs2 import views
 
 urlpatterns = [
 
-    # Home view
-    url(r"^$", views.HomeView.as_view(), name='home'),
-
-
     # Auth views
     url(r'^auth/login/$', views.LoginView.as_view(), name='login'),
     url(r'^auth/logout/$', views.get_logout, name='logout'),

@@ -15,6 +15,7 @@ class VehicleSerializer(serializers.ModelSerializer):
 
     location_set = serializers.SerializerMethodField()
 
+    # return sorted by date location
     def get_location_set(self, obj):
         request = self.context.get('request', None)
         if request:
@@ -40,3 +41,10 @@ class VehicleDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Object
         fields = ('id', 'name', 'created', 'users', 'visible', 'location_set', )
+
+
+class SettingsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Setting
+        fields = ('max_objects', 'max_points', )

@@ -5,7 +5,7 @@ from rest_framework import status, permissions
 from rest_framework.response import Response
 from api import serializers
 from api.permissions import IsAuthorOrReadOnly
-from lbs2 import models, utils
+from lbs2 import models
 
 
 # List of orders
@@ -42,3 +42,15 @@ class VehicleDetail(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# List of settings
+class SettingsList(APIView):
+    permission_classes = (permissions.IsAuthenticated, )
+
+    def get(self, request):
+
+        queryset = models.Setting.objects.get(id=1)
+
+        serializer = serializers.SettingsSerializer(queryset)
+        return Response(serializer.data)
