@@ -3,9 +3,11 @@ angular
     .controller('HomeController', HomeController);
 
 function HomeController($scope, MyVehicles, $mdDialog, olData) {
+
+    //init
     var i = 0,
         j = 0,
-        backDays = 1;
+        backDays = 1; // 24 hours start date
     $scope.markers = [];
     $scope.endDate = new Date();
     $scope.startDate = new Date();
@@ -14,8 +16,12 @@ function HomeController($scope, MyVehicles, $mdDialog, olData) {
     $scope.vehiclesLoadError = false;
     $scope.vectorLineLayer = '';
     $scope.oldLayers = [];
-    $scope.lineColors = ['red', 'blue', '#00FF00'];
+    $scope.lineColors = ['red', 'blue', '#00FF00']; // colors of lines
 
+
+    /**
+     * Add render icons and lines of locations for each vehicle
+     */
     $scope.renderIcons = function () {
 
 
@@ -25,6 +31,9 @@ function HomeController($scope, MyVehicles, $mdDialog, olData) {
 
         olData.getMap().then(function (map) {
 
+            /**
+             * remove previous layers form map
+             */
             if ($scope.oldLayers) {
                 for (var n = 0; n < $scope.oldLayers.length; n++) {
                     map.removeLayer($scope.oldLayers[n]);
@@ -39,7 +48,7 @@ function HomeController($scope, MyVehicles, $mdDialog, olData) {
                     // create marks for each vehicle
                     for (j = 0; j < $scope.vehicles[i].location_set.length; j++) {
 
-
+                        // vehicle detail
                         var temp = {
                             name: $scope.vehicles[i].name,
                             lon: $scope.vehicles[i].location_set[j].longitude,
@@ -57,17 +66,13 @@ function HomeController($scope, MyVehicles, $mdDialog, olData) {
                             draggable: true
                         };
 
-                        $scope.markers.push(temp); // push each object in arr
-                        $scope.coordinates.push([temp.lon, temp.lat]);
+                        $scope.markers.push(temp); // push each object detail in arr
+                        $scope.coordinates.push([temp.lon, temp.lat]); // locations of each vehicle
 
-                        // push coordinates here
 
                     }
 
-                    //function
-
-                    // map.removeLayer($scope.vectorLineLayer);
-                    var points = [];
+                    var points = []; // coordinates for lines
 
                     for (var q = 0; q < $scope.coordinates.length; q++) {
 
@@ -81,6 +86,7 @@ function HomeController($scope, MyVehicles, $mdDialog, olData) {
                     var vectorLine = new ol.source.Vector({});
                     vectorLine.addFeature(featureLine);
 
+                    // add layers of lines
                     $scope.vectorLineLayer = new ol.layer.Vector({
                         source: vectorLine,
                         style: new ol.style.Style({
@@ -91,10 +97,9 @@ function HomeController($scope, MyVehicles, $mdDialog, olData) {
 
 
                     map.addLayer($scope.vectorLineLayer);
-                    $scope.oldLayers.push($scope.vectorLineLayer);
+                    $scope.oldLayers.push($scope.vectorLineLayer); // add vector in arr for remove after re-render
                     $scope.coordinates = [];
 
-                    //clean coordinates
                 }
 
             }
@@ -132,6 +137,9 @@ function HomeController($scope, MyVehicles, $mdDialog, olData) {
     };
 
 
+    /**
+     * toggle checkbox of vehicle visibility
+     */
     $scope.toggleVisibleVehicle = function (index) {
         $scope.vehiclesLoad = false;
 
@@ -147,6 +155,9 @@ function HomeController($scope, MyVehicles, $mdDialog, olData) {
 
     };
 
+    /**
+     * sort locations of vehicle by date
+     */
     $scope.sortByDate = function () {
         $scope.vehiclesLoad = false;
 
@@ -162,6 +173,10 @@ function HomeController($scope, MyVehicles, $mdDialog, olData) {
         });
 
     };
+
+    /**
+     * show modal with report with location and details of vehicle for a specified time
+     */
 
     $scope.showReport = function (ev, index) {
 
@@ -187,6 +202,9 @@ function HomeController($scope, MyVehicles, $mdDialog, olData) {
 
     };
 
+     /**
+     * get list of vehicles
+     */
 
     $scope.vehicles = MyVehicles.query(function (response) {
 
