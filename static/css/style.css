@@ -84,7 +84,7 @@ body {
 .sidebar{
     position: fixed;
     top: 140px;
-    left:40px;
+    left: 3%;
     z-index: 9;
 }
 .mini-submenu,  .mini-submenu-left {
