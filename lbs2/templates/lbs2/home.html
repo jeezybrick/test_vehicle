@@ -59,11 +59,11 @@
                                         <md-list ng-cloak>
                                             <md-subheader
                                                     class="md-no-sticky">{% trans "Choose vehicle" %}</md-subheader>
-                                            <md-list-item ng-repeat="vehicle in vehicles">
-                                                <md-checkbox class="md-secondary"
-                                                             ng-click="toggleVisibleVehicle($index)"
+                                            <md-list-item ng-click="showReport($event, $index)" ng-repeat="vehicle in vehicles">
+                                                <p> [[ vehicle.name ]] </p>
+                                                <md-checkbox class="md-secondary" aria-label="Toggle visibility"
+                                                             ng-change="toggleVisibleVehicle($index)"
                                                              ng-model="vehicle.is_visible"></md-checkbox>
-                                                <p ng-click="showReport($event, $index)"> [[ vehicle.name ]] </p>
                                             </md-list-item>
                                         </md-list>
                                         <h5 ng-hide="vehicles.length">{% trans "No vehicles" %}</h5>
