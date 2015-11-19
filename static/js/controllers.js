@@ -235,7 +235,6 @@ function HomeController($scope, MyVehicles, $mdDialog, $mdToast, olData, Setting
 
     $scope.showReport = function (ev, index) {
 
-        $scope.chooseVehicle = $scope.vehicles[index];
 
         $mdDialog.show({
             controller: ModalController,
